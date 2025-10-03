@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Inicio - Sistema de Gestión de Productos{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="text-center mb-5">
+            <h1 class="display-4 text-primary">
+                <i class="fas fa-boxes"></i> Sistema de Gestión de Productos
+            </h1>
+            <p class="lead text-muted">Gestiona tu inventario de productos de manera eficiente</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="card-body text-center p-5">
+                        <div class="mb-4">
+                            <i class="fas fa-plus-circle text-success" style="font-size: 4rem;"></i>
+                        </div>
+                        <h3 class="card-title text-success">Alta de Productos</h3>
+                        <p class="card-text text-muted">
+                            Agrega nuevos productos al inventario con toda la información necesaria.
+                        </p>
+                        <a href="{{ url_for('alta') }}" class="btn btn-success btn-lg">
+                            <i class="fas fa-plus"></i> Agregar Producto
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="card-body text-center p-5">
+                        <div class="mb-4">
+                            <i class="fas fa-edit text-warning" style="font-size: 4rem;"></i>
+                        </div>
+                        <h3 class="card-title text-warning">Gestión de Productos</h3>
+                        <p class="card-text text-muted">
+                            Consulta, modifica o elimina productos existentes en el inventario.
+                        </p>
+                        <a href="{{ url_for('gestion') }}" class="btn btn-warning btn-lg">
+                            <i class="fas fa-list"></i> Gestionar Productos
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card border-0 bg-light">
+                    <div class="card-body">
+                        <h4 class="card-title text-center mb-4">
+                            <i class="fas fa-info-circle text-info"></i> Información del Sistema
+                        </h4>
+                        <div class="row text-center">
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <i class="fas fa-database text-primary" style="font-size: 2rem;"></i>
+                                    <h6 class="mt-2">Base de Datos</h6>
+                                    <small class="text-muted">SQLite</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <i class="fas fa-tags text-success" style="font-size: 2rem;"></i>
+                                    <h6 class="mt-2">Campos</h6>
+                                    <small class="text-muted">SKU, Precio, Categoría</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <i class="fas fa-chart-line text-warning" style="font-size: 2rem;"></i>
+                                    <h6 class="mt-2">Inventario</h6>
+                                    <small class="text-muted">Control de Stock</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <i class="fas fa-shield-alt text-info" style="font-size: 2rem;"></i>
+                                    <h6 class="mt-2">Seguro</h6>
+                                    <small class="text-muted">Validaciones</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

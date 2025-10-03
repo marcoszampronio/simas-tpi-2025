@@ -1,0 +1,294 @@
+{% extends "base.html" %}
+
+{% block title %}{{ producto.sku }} - Detalle del Producto{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-primary text-white">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h3 class="mb-0">
+                            <i class="fas fa-box"></i> {{ producto.sku }} - Detalle del Producto
+                        </h3>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <button type="button" class="btn btn-warning me-2" onclick="toggleEditMode()">
+                            <i class="fas fa-edit"></i> Editar
+                        </button>
+                        <button type="button" class="btn btn-danger" onclick="eliminarProducto({{ producto.id }}, '{{ producto.sku }}')">
+                            <i class="fas fa-trash"></i> Eliminar
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST" action="{{ url_for('editar_producto', id=producto.id) }}" id="productoForm">
+                    <div class="row">
+                        <!-- Información Básica -->
+                        <div class="col-md-6">
+                            <h5 class="text-primary mb-3">
+                                <i class="fas fa-info-circle"></i> Información Básica
+                            </h5>
+                            
+                            <div class="mb-3">
+                                <label for="sku" class="form-label">
+                                    <i class="fas fa-barcode"></i> SKU del Producto *
+                                </label>
+                                <input type="text" class="form-control" id="sku" name="sku" 
+                                       value="{{ producto.sku }}" readonly>
+                                <div class="form-text">Identificador único del producto</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="categoria" class="form-label">
+                                    <i class="fas fa-tags"></i> Categoría *
+                                </label>
+                                <select class="form-control" id="categoria" name="categoria" disabled>
+                                    <option value="Electrónicos" {% if producto.categoria == 'Electrónicos' %}selected{% endif %}>Electrónicos</option>
+                                    <option value="Ropa" {% if producto.categoria == 'Ropa' %}selected{% endif %}>Ropa</option>
+                                    <option value="Hogar" {% if producto.categoria == 'Hogar' %}selected{% endif %}>Hogar</option>
+                                    <option value="Deportes" {% if producto.categoria == 'Deportes' %}selected{% endif %}>Deportes</option>
+                                    <option value="Libros" {% if producto.categoria == 'Libros' %}selected{% endif %}>Libros</option>
+                                    <option value="Juguetes" {% if producto.categoria == 'Juguetes' %}selected{% endif %}>Juguetes</option>
+                                    <option value="Alimentación" {% if producto.categoria == 'Alimentación' %}selected{% endif %}>Alimentación</option>
+                                    <option value="Otros" {% if producto.categoria == 'Otros' %}selected{% endif %}>Otros</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="estado" class="form-label">
+                                    <i class="fas fa-toggle-on"></i> Estado *
+                                </label>
+                                <select class="form-control" id="estado" name="estado" disabled>
+                                    <option value="Activo" {% if producto.estado == 'Activo' %}selected{% endif %}>Activo</option>
+                                    <option value="Inactivo" {% if producto.estado == 'Inactivo' %}selected{% endif %}>Inactivo</option>
+                                    <option value="Descontinuado" {% if producto.estado == 'Descontinuado' %}selected{% endif %}>Descontinuado</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="imagen" class="form-label">
+                                    <i class="fas fa-image"></i> URL de Imagen
+                                </label>
+                                <input type="url" class="form-control" id="imagen" name="imagen" 
+                                       value="{{ producto.imagen or '' }}" readonly>
+                                <div class="form-text">URL de la imagen del producto</div>
+                                {% if producto.imagen %}
+                                    <div class="mt-2">
+                                        <img src="{{ producto.imagen }}" alt="{{ producto.sku }}" 
+                                             class="img-thumbnail" style="max-width: 200px; max-height: 200px;"
+                                             onerror="this.style.display='none'">
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Información Comercial -->
+                        <div class="col-md-6">
+                            <h5 class="text-success mb-3">
+                                <i class="fas fa-dollar-sign"></i> Información Comercial
+                            </h5>
+
+                            <div class="mb-3">
+                                <label for="precio_venta" class="form-label">
+                                    <i class="fas fa-tag"></i> Precio de Venta *
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" id="precio_venta" name="precio_venta" 
+                                           step="0.01" min="0" value="{{ producto.precio_venta }}" readonly>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="costo_unitario" class="form-label">
+                                    <i class="fas fa-calculator"></i> Costo Unitario *
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" id="costo_unitario" name="costo_unitario" 
+                                           step="0.01" min="0" value="{{ producto.costo_unitario }}" readonly>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="cantidad" class="form-label">
+                                    <i class="fas fa-boxes"></i> Cantidad en Stock *
+                                </label>
+                                <input type="number" class="form-control" id="cantidad" name="cantidad" 
+                                       min="0" value="{{ producto.cantidad }}" readonly>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="proveedor" class="form-label">
+                                    <i class="fas fa-truck"></i> Proveedor
+                                </label>
+                                <input type="text" class="form-control" id="proveedor" name="proveedor"
+                                       value="{{ producto.proveedor or '' }}" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Información Adicional -->
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <h5 class="text-info mb-3">
+                                <i class="fas fa-clipboard-list"></i> Información Adicional
+                            </h5>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="descripcion" class="form-label">
+                                    <i class="fas fa-align-left"></i> Descripción
+                                </label>
+                                <textarea class="form-control" id="descripcion" name="descripcion" rows="4" readonly>{{ producto.descripcion or '' }}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="politica_gestion_inventario" class="form-label">
+                                    <i class="fas fa-cogs"></i> Política de Gestión de Inventario
+                                </label>
+                                <select class="form-control" id="politica_gestion_inventario" name="politica_gestion_inventario" disabled>
+                                    <option value="">Seleccionar política</option>
+                                    <option value="FIFO" {% if producto.politica_gestion_inventario == 'FIFO' %}selected{% endif %}>FIFO (First In, First Out)</option>
+                                    <option value="LIFO" {% if producto.politica_gestion_inventario == 'LIFO' %}selected{% endif %}>LIFO (Last In, First Out)</option>
+                                    <option value="Precio Promedio" {% if producto.politica_gestion_inventario == 'Precio Promedio' %}selected{% endif %}>Precio Promedio</option>
+                                    <option value="Específico" {% if producto.politica_gestion_inventario == 'Específico' %}selected{% endif %}>Específico</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Información del Sistema -->
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <h5 class="text-secondary mb-3">
+                                <i class="fas fa-info"></i> Información del Sistema
+                            </h5>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Fecha de Creación</label>
+                                <input type="text" class="form-control" value="{{ producto.fecha_creacion }}" readonly>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Última Modificación</label>
+                                <input type="text" class="form-control" value="{{ producto.fecha_modificacion }}" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botones -->
+                    <div class="row mt-4">
+                        <div class="col-12 text-center">
+                            <button type="submit" class="btn btn-success btn-lg me-3" id="saveBtn" style="display: none;">
+                                <i class="fas fa-save"></i> Guardar Cambios
+                            </button>
+                            <button type="button" class="btn btn-secondary btn-lg me-3" id="cancelBtn" style="display: none;" onclick="cancelEdit()">
+                                <i class="fas fa-times"></i> Cancelar
+                            </button>
+                            <a href="{{ url_for('gestion') }}" class="btn btn-primary btn-lg">
+                                <i class="fas fa-arrow-left"></i> Volver a la Lista
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmación para eliminar -->
+<div class="modal fade" id="eliminarModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-exclamation-triangle"></i> Confirmar Eliminación
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Estás seguro de que deseas eliminar el producto <strong id="productoSku"></strong>?</p>
+                <p class="text-danger"><small>Esta acción no se puede deshacer.</small></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+                <form id="eliminarForm" method="POST" style="display: inline;">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let editMode = false;
+
+function toggleEditMode() {
+    editMode = !editMode;
+    const inputs = document.querySelectorAll('input, select, textarea');
+    const saveBtn = document.getElementById('saveBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const editBtn = document.querySelector('button[onclick="toggleEditMode()"]');
+    
+    inputs.forEach(input => {
+        if (input.id !== 'sku') { // SKU no se puede editar
+            input.disabled = !editMode;
+            input.readOnly = !editMode;
+        }
+    });
+    
+    if (editMode) {
+        saveBtn.style.display = 'inline-block';
+        cancelBtn.style.display = 'inline-block';
+        editBtn.innerHTML = '<i class="fas fa-eye"></i> Ver Solo';
+        editBtn.className = 'btn btn-info me-2';
+    } else {
+        saveBtn.style.display = 'none';
+        cancelBtn.style.display = 'none';
+        editBtn.innerHTML = '<i class="fas fa-edit"></i> Editar';
+        editBtn.className = 'btn btn-warning me-2';
+    }
+}
+
+function cancelEdit() {
+    // Recargar la página para cancelar cambios
+    window.location.reload();
+}
+
+function eliminarProducto(id, sku) {
+    document.getElementById('productoSku').textContent = sku;
+    document.getElementById('eliminarForm').action = '/eliminar_producto/' + id;
+    
+    var modal = new bootstrap.Modal(document.getElementById('eliminarModal'));
+    modal.show();
+}
+
+document.getElementById('productoForm').addEventListener('submit', function(e) {
+    const precioVenta = parseFloat(document.getElementById('precio_venta').value);
+    const costoUnitario = parseFloat(document.getElementById('costo_unitario').value);
+    
+    if (precioVenta < costoUnitario) {
+        e.preventDefault();
+        alert('El precio de venta no puede ser menor al costo unitario.');
+        return false;
+    }
+});
+</script>
+{% endblock %}
