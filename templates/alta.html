@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block title %}Alta de Productos - CRUD Productos{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h3 class="mb-0">
+                    <i class="fas fa-plus-circle"></i> Alta de Producto
+                </h3>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('crear_producto') }}">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="sku" class="form-label">
+                                    <i class="fas fa-barcode"></i> SKU del Producto *
+                                </label>
+                                <input type="text" class="form-control" id="sku" name="sku" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="categoria" class="form-label">
+                                    <i class="fas fa-tags"></i> Categoría *
+                                </label>
+                                <select class="form-select" id="categoria" name="categoria" required>
+                                    <option value="">Seleccionar categoría</option>
+                                    <option value="Electrónicos">Electrónicos</option>
+                                    <option value="Ropa">Ropa</option>
+                                    <option value="Hogar">Hogar</option>
+                                    <option value="Deportes">Deportes</option>
+                                    <option value="Libros">Libros</option>
+                                    <option value="Otros">Otros</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="cantidad" class="form-label">
+                                    <i class="fas fa-cubes"></i> Cantidad *
+                                </label>
+                                <input type="number" class="form-control" id="cantidad" name="cantidad" min="0" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="estado" class="form-label">
+                                    <i class="fas fa-toggle-on"></i> Estado *
+                                </label>
+                                <select class="form-select" id="estado" name="estado" required>
+                                    <option value="Activo">Activo</option>
+                                    <option value="Inactivo">Inactivo</option>
+                                    <option value="Descontinuado">Descontinuado</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="precio_venta" class="form-label">
+                                    <i class="fas fa-dollar-sign"></i> Precio de Venta *
+                                </label>
+                                <input type="number" class="form-control" id="precio_venta" name="precio_venta" step="0.01" min="0" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="costo_unitario" class="form-label">
+                                    <i class="fas fa-coins"></i> Costo Unitario *
+                                </label>
+                                <input type="number" class="form-control" id="costo_unitario" name="costo_unitario" step="0.01" min="0" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="imagen" class="form-label">
+                            <i class="fas fa-image"></i> URL de Imagen
+                        </label>
+                        <input type="url" class="form-control" id="imagen" name="imagen" placeholder="https://ejemplo.com/imagen.jpg">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label">
+                            <i class="fas fa-align-left"></i> Descripción
+                        </label>
+                        <textarea class="form-control" id="descripcion" name="descripcion" rows="3" placeholder="Descripción detallada del producto"></textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="politica_inventario" class="form-label">
+                                    <i class="fas fa-clipboard-list"></i> Política de Gestión de Inventario
+                                </label>
+                                <select class="form-select" id="politica_inventario" name="politica_inventario">
+                                    <option value="">Seleccionar política</option>
+                                    <option value="FIFO">FIFO (Primero en entrar, primero en salir)</option>
+                                    <option value="LIFO">LIFO (Último en entrar, primero en salir)</option>
+                                    <option value="Promedio Ponderado">Promedio Ponderado</option>
+                                    <option value="Específico">Identificación Específica</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="proveedor" class="form-label">
+                                    <i class="fas fa-truck"></i> Proveedor
+                                </label>
+                                <input type="text" class="form-control" id="proveedor" name="proveedor" placeholder="Nombre del proveedor">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('index') }}" class="btn btn-secondary me-md-2">
+                            <i class="fas fa-arrow-left"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> Crear Producto
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

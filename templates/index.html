@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Inicio - CRUD Productos{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="text-center mb-5">
+            <h1 class="display-4 text-primary">
+                <i class="fas fa-warehouse"></i> 
+                Sistema de Gestión de Productos
+            </h1>
+            <p class="lead text-muted">Administra tu inventario de manera eficiente</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card h-100 shadow-sm option-card">
+                    <div class="card-body text-center d-flex flex-column">
+                        <div class="mb-4">
+                            <i class="fas fa-plus-circle fa-4x text-success"></i>
+                        </div>
+                        <h3 class="card-title text-success">Alta de Productos</h3>
+                        <p class="card-text flex-grow-1">
+                            Registra nuevos productos en tu inventario con toda la información necesaria.
+                        </p>
+                        <a href="{{ url_for('alta') }}" class="btn btn-success btn-lg">
+                            <i class="fas fa-plus"></i> Crear Producto
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card h-100 shadow-sm option-card">
+                    <div class="card-body text-center d-flex flex-column">
+                        <div class="mb-4">
+                            <i class="fas fa-search fa-4x text-info"></i>
+                        </div>
+                        <h3 class="card-title text-info">Consulta y Gestión</h3>
+                        <p class="card-text flex-grow-1">
+                            Consulta, modifica o elimina productos existentes de tu inventario.
+                        </p>
+                        <a href="{{ url_for('consulta') }}" class="btn btn-info btn-lg">
+                            <i class="fas fa-list"></i> Ver Productos
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="fas fa-info-circle"></i> Funcionalidades del Sistema
+                        </h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-check text-success"></i> Crear nuevos productos</li>
+                                    <li><i class="fas fa-check text-success"></i> Consultar inventario completo</li>
+                                    <li><i class="fas fa-check text-success"></i> Modificar información de productos</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-check text-success"></i> Eliminar productos obsoletos</li>
+                                    <li><i class="fas fa-check text-success"></i> Gestión de inventario</li>
+                                    <li><i class="fas fa-check text-success"></i> Control de proveedores</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

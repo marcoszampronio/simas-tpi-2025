@@ -1,0 +1,232 @@
+{% extends "base.html" %}
+
+{% block title %}Detalle del Producto - {{ producto.sku }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card shadow">
+            <div class="card-header bg-info text-white">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0">
+                        <i class="fas fa-eye"></i> Detalle del Producto
+                    </h3>
+                    <div>
+                        <a href="{{ url_for('editar', id=producto.id) }}" class="btn btn-warning btn-sm">
+                            <i class="fas fa-edit"></i> Editar
+                        </a>
+                        <a href="{{ url_for('consulta') }}" class="btn btn-light btn-sm">
+                            <i class="fas fa-arrow-left"></i> Volver
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        {% if producto.imagen %}
+                        <div class="text-center mb-3">
+                            <img src="{{ producto.imagen }}" alt="{{ producto.sku }}" class="img-fluid rounded shadow-sm" style="max-height: 300px;">
+                        </div>
+                        {% else %}
+                        <div class="text-center mb-3">
+                            <div class="bg-light rounded p-5">
+                                <i class="fas fa-image fa-5x text-muted"></i>
+                                <p class="text-muted mt-2">Sin imagen</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold text-muted">
+                                        <i class="fas fa-barcode"></i> SKU
+                                    </label>
+                                    <p class="fs-5 fw-bold text-primary">{{ producto.sku }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold text-muted">
+                                        <i class="fas fa-tags"></i> Categoría
+                                    </label>
+                                    <p><span class="badge bg-secondary fs-6">{{ producto.categoria }}</span></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold text-muted">
+                                        <i class="fas fa-cubes"></i> Cantidad en Stock
+                                    </label>
+                                    <p>
+                                        <span class="badge bg-{{ 'success' if producto.cantidad > 10 else 'warning' if producto.cantidad > 0 else 'danger' }} fs-6">
+                                            {{ producto.cantidad }} unidades
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold text-muted">
+                                        <i class="fas fa-toggle-on"></i> Estado
+                                    </label>
+                                    <p>
+                                        <span class="badge bg-{{ 'success' if producto.estado == 'Activo' else 'secondary' }} fs-6">
+                                            {{ producto.estado }}
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold text-muted">
+                                        <i class="fas fa-dollar-sign"></i> Precio de Venta
+                                    </label>
+                                    <p class="fs-4 fw-bold text-success">${{ "%.2f"|format(producto.precio_venta) }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold text-muted">
+                                        <i class="fas fa-coins"></i> Costo Unitario
+                                    </label>
+                                    <p class="fs-5 text-info">${{ "%.2f"|format(producto.costo_unitario) }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-muted">
+                                <i class="fas fa-chart-line"></i> Margen de Ganancia
+                            </label>
+                            {% set margen = ((producto.precio_venta - producto.costo_unitario) / producto.costo_unitario * 100) %}
+                            <p>
+                                <span class="badge bg-{{ 'success' if margen > 20 else 'warning' if margen > 0 else 'danger' }} fs-6">
+                                    {{ "%.1f"|format(margen) }}%
+                                </span>
+                                <small class="text-muted">(Ganancia: ${{ "%.2f"|format(producto.precio_venta - producto.costo_unitario) }})</small>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        {% if producto.descripcion %}
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-muted">
+                                <i class="fas fa-align-left"></i> Descripción
+                            </label>
+                            <p class="text-justify">{{ producto.descripcion }}</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        {% if producto.politica_inventario %}
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-muted">
+                                <i class="fas fa-clipboard-list"></i> Política de Inventario
+                            </label>
+                            <p>{{ producto.politica_inventario }}</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        {% if producto.proveedor %}
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-muted">
+                                <i class="fas fa-truck"></i> Proveedor
+                            </label>
+                            <p>{{ producto.proveedor }}</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-muted">
+                                <i class="fas fa-calendar-plus"></i> Fecha de Creación
+                            </label>
+                            <p>{{ producto.fecha_creacion.strftime('%d de %B de %Y a las %H:%M') }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-muted">
+                                <i class="fas fa-calendar-edit"></i> Última Modificación
+                            </label>
+                            <p>{{ producto.fecha_modificacion.strftime('%d de %B de %Y a las %H:%M') }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a href="{{ url_for('consulta') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Volver a la Lista
+                    </a>
+                    <div>
+                        <a href="{{ url_for('editar', id=producto.id) }}" class="btn btn-warning me-2">
+                            <i class="fas fa-edit"></i> Editar Producto
+                        </a>
+                        <button type="button" class="btn btn-danger" onclick="confirmarEliminacion({{ producto.id }}, '{{ producto.sku }}')">
+                            <i class="fas fa-trash"></i> Eliminar Producto
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmación para eliminar -->
+<div class="modal fade" id="modalEliminar" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmar Eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Estás seguro de que deseas eliminar el producto <strong id="productoEliminar"></strong>?</p>
+                <p class="text-danger"><small>Esta acción no se puede deshacer.</small></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <form id="formEliminar" method="POST" style="display: inline;">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function confirmarEliminacion(id, sku) {
+    document.getElementById('productoEliminar').textContent = sku;
+    document.getElementById('formEliminar').action = '/eliminar/' + id;
+    new bootstrap.Modal(document.getElementById('modalEliminar')).show();
+}
+</script>
+{% endblock %}
