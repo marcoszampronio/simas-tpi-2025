@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Inicio{% endblock %}
+{% block content %}
+<h1>Gestión de Productos</h1>
+<div class="grid">
+  <a class="card" href="{{ url_for('create_product') }}">
+    <h2>Alta</h2>
+    <p>Crear un nuevo producto</p>
+  </a>
+  <a class="card" href="{{ url_for('list_products') }}">
+    <h2>Baja / Modificación / Consulta</h2>
+    <p>Ver listado y administrar productos</p>
+  </a>
+</div>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Productos{% endblock %}
+{% block content %}
+<h1>Productos</h1>
+<form class="search" method="get" action="">
+  <input type="text" name="q" placeholder="Buscar por SKU, categoría, proveedor..." value="{{ q }}">
+  <button type="submit" class="btn">Buscar</button>
+  <a class="btn" href="{{ url_for('list_products') }}">Limpiar</a>
+</form>
+
+<div class="table">
+  <div class="table-header">
+    <div>ID</div>
+    <div>SKU</div>
+    <div>Categoría</div>
+    <div>Proveedor</div>
+    <div>Estado</div>
+    <div>Cantidad</div>
+    <div>Precio</div>
+    <div>Creado</div>
+  </div>
+  {% for p in products %}
+  <a class="table-row" href="{{ url_for('product_detail', product_id=p['id']) }}">
+    <div>{{ p['id'] }}</div>
+    <div>{{ p['sku'] }}</div>
+    <div>{{ p['category'] or '-' }}</div>
+    <div>{{ p['supplier'] or '-' }}</div>
+    <div>{{ p['status'] }}</div>
+    <div>{{ p['quantity'] }}</div>
+    <div>${{ '%.2f' % p['sale_price'] }}</div>
+    <div>{{ p['created_at'] }}</div>
+  </a>
+  {% else %}
+  <div class="empty">No hay productos.</div>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}Detalle de Producto{% endblock %}
+{% block content %}
+<h1>Producto #{{ product['id'] }}</h1>
+<div class="detail">
+  <div class="image">
+    {% if product['image_filename'] %}
+      <img src="{{ url_for('uploaded_file', filename=product['image_filename']) }}" alt="Imagen del producto">
+    {% else %}
+      <div class="placeholder">Sin imagen</div>
+    {% endif %}
+  </div>
+  <form class="form" action="" method="post" enctype="multipart/form-data">
+    <div class="form-row">
+      <label>SKU</label>
+      <input name="sku" value="{{ product['sku'] }}" required>
+    </div>
+    <div class="form-row">
+      <label>Imagen</label>
+      <input type="file" name="image" accept="image/*">
+    </div>
+    <div class="form-row">
+      <label>Cantidad</label>
+      <input type="number" name="quantity" value="{{ product['quantity'] }}" min="0">
+    </div>
+    <div class="form-row">
+      <label>Estado</label>
+      <select name="status" value="{{ product['status'] }}">
+        <option value="activo" {% if product['status']=='activo' %}selected{% endif %}>Activo</option>
+        <option value="inactivo" {% if product['status']=='inactivo' %}selected{% endif %}>Inactivo</option>
+        <option value="agotado" {% if product['status']=='agotado' %}selected{% endif %}>Agotado</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label>Precio de Venta</label>
+      <input type="number" step="0.01" name="sale_price" value="{{ product['sale_price'] }}">
+    </div>
+    <div class="form-row">
+      <label>Categoría</label>
+      <input name="category" value="{{ product['category'] }}">
+    </div>
+    <div class="form-row">
+      <label>Descripción</label>
+      <textarea name="description" rows="3">{{ product['description'] }}</textarea>
+    </div>
+    <div class="form-row">
+      <label>Política de Gestión de Inventario</label>
+      <input name="inventory_policy" value="{{ product['inventory_policy'] }}">
+    </div>
+    <div class="form-row">
+      <label>Proveedor</label>
+      <input name="supplier" value="{{ product['supplier'] }}">
+    </div>
+    <div class="form-row">
+      <label>Costo Unitario</label>
+      <input type="number" step="0.01" name="unit_cost" value="{{ product['unit_cost'] }}">
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn primary">Guardar</button>
+      <a class="btn" href="{{ url_for('list_products') }}">Volver</a>
+    </div>
+  </form>
+  <form class="delete-form" action="{{ url_for('delete_product', product_id=product['id']) }}" method="post" onsubmit="return confirm('¿Eliminar producto?');">
+    <button class="btn danger" type="submit">Eliminar</button>
+  </form>
+</div>
+{% endblock %}
