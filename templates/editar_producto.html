@@ -1,0 +1,291 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Producto - {{ producto.sku }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card shadow">
+            <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
+                <h3 class="mb-0">
+                    <i class="fas fa-edit"></i> Editar Producto: {{ producto.sku }}
+                </h3>
+                <div>
+                    <a href="{{ url_for('detalle_producto', id=producto.id) }}" class="btn btn-info btn-sm">
+                        <i class="fas fa-eye"></i> Ver Detalles
+                    </a>
+                    <a href="{{ url_for('consulta') }}" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-arrow-left"></i> Volver
+                    </a>
+                </div>
+            </div>
+            <div class="card-body p-4">
+                <form id="productoForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="sku" class="form-label">
+                                    <i class="fas fa-barcode"></i> SKU del Producto *
+                                </label>
+                                <input type="text" class="form-control" id="sku" name="sku" 
+                                       value="{{ producto.sku }}" required>
+                                <div class="form-text">Código único del producto</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="imagen" class="form-label">
+                                    <i class="fas fa-image"></i> URL de Imagen
+                                </label>
+                                <input type="url" class="form-control" id="imagen" name="imagen" 
+                                       value="{{ producto.imagen or '' }}">
+                                <div class="form-text">URL de la imagen del producto</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="cantidad" class="form-label">
+                                    <i class="fas fa-hashtag"></i> Cantidad *
+                                </label>
+                                <input type="number" class="form-control" id="cantidad" name="cantidad" 
+                                       value="{{ producto.cantidad }}" min="0" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="estado" class="form-label">
+                                    <i class="fas fa-toggle-on"></i> Estado *
+                                </label>
+                                <select class="form-select" id="estado" name="estado" required>
+                                    <option value="Activo" {{ 'selected' if producto.estado == 'Activo' else '' }}>Activo</option>
+                                    <option value="Inactivo" {{ 'selected' if producto.estado == 'Inactivo' else '' }}>Inactivo</option>
+                                    <option value="Descontinuado" {{ 'selected' if producto.estado == 'Descontinuado' else '' }}>Descontinuado</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="categoria" class="form-label">
+                                    <i class="fas fa-tags"></i> Categoría *
+                                </label>
+                                <input type="text" class="form-control" id="categoria" name="categoria" 
+                                       value="{{ producto.categoria }}" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="precio_venta" class="form-label">
+                                    <i class="fas fa-dollar-sign"></i> Precio de Venta *
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" id="precio_venta" name="precio_venta" 
+                                           value="{{ producto.precio_venta }}" step="0.01" min="0" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="costo_unitario" class="form-label">
+                                    <i class="fas fa-coins"></i> Costo Unitario *
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" id="costo_unitario" name="costo_unitario" 
+                                           value="{{ producto.costo_unitario }}" step="0.01" min="0" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="proveedor" class="form-label">
+                                    <i class="fas fa-truck"></i> Proveedor *
+                                </label>
+                                <input type="text" class="form-control" id="proveedor" name="proveedor" 
+                                       value="{{ producto.proveedor }}" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="politica_gestion_inventario" class="form-label">
+                                    <i class="fas fa-cogs"></i> Política de Gestión de Inventario
+                                </label>
+                                <select class="form-select" id="politica_gestion_inventario" name="politica_gestion_inventario">
+                                    <option value="">Seleccionar política</option>
+                                    <option value="FIFO" {{ 'selected' if producto.politica_gestion_inventario == 'FIFO' else '' }}>FIFO (Primero en entrar, primero en salir)</option>
+                                    <option value="LIFO" {{ 'selected' if producto.politica_gestion_inventario == 'LIFO' else '' }}>LIFO (Último en entrar, primero en salir)</option>
+                                    <option value="PROMEDIO" {{ 'selected' if producto.politica_gestion_inventario == 'PROMEDIO' else '' }}>Promedio ponderado</option>
+                                    <option value="ESPECIFICO" {{ 'selected' if producto.politica_gestion_inventario == 'ESPECIFICO' else '' }}>Identificación específica</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label">
+                            <i class="fas fa-align-left"></i> Descripción
+                        </label>
+                        <textarea class="form-control" id="descripcion" name="descripcion" rows="4" 
+                                  placeholder="Descripción detallada del producto...">{{ producto.descripcion or '' }}</textarea>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <a href="{{ url_for('detalle_producto', id=producto.id) }}" class="btn btn-secondary">
+                                <i class="fas fa-eye"></i> Ver Detalles
+                            </a>
+                            <a href="{{ url_for('consulta') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left"></i> Volver a Consulta
+                            </a>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-danger me-2" onclick="eliminarProducto()">
+                                <i class="fas fa-trash"></i> Eliminar
+                            </button>
+                            <button type="submit" class="btn btn-warning">
+                                <i class="fas fa-save"></i> Guardar Cambios
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmación de actualización -->
+<div class="modal fade" id="updateModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmar Actualización</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro de que desea actualizar este producto?</p>
+                <div id="productoPreview"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-warning" id="confirmUpdate">Actualizar Producto</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmación de eliminación -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-danger">
+                    <i class="fas fa-exclamation-triangle"></i> Confirmar Eliminación
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro de que desea eliminar el producto <strong>{{ producto.sku }}</strong>?</p>
+                <div class="alert alert-warning">
+                    <i class="fas fa-warning"></i> Esta acción no se puede deshacer.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="confirmDelete">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('productoForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Mostrar modal de confirmación
+    const formData = new FormData(this);
+    const productoData = Object.fromEntries(formData);
+    
+    // Crear preview del producto
+    const preview = `
+        <div class="row">
+            <div class="col-6"><strong>SKU:</strong></div>
+            <div class="col-6">${productoData.sku}</div>
+            <div class="col-6"><strong>Categoría:</strong></div>
+            <div class="col-6">${productoData.categoria}</div>
+            <div class="col-6"><strong>Cantidad:</strong></div>
+            <div class="col-6">${productoData.cantidad}</div>
+            <div class="col-6"><strong>Precio:</strong></div>
+            <div class="col-6">$${productoData.precio_venta}</div>
+        </div>
+    `;
+    
+    document.getElementById('productoPreview').innerHTML = preview;
+    
+    const modal = new bootstrap.Modal(document.getElementById('updateModal'));
+    modal.show();
+});
+
+document.getElementById('confirmUpdate').addEventListener('click', function() {
+    const formData = new FormData(document.getElementById('productoForm'));
+    const productoData = Object.fromEntries(formData);
+    
+    fetch('/api/productos/{{ producto.id }}', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(productoData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            alert('Error: ' + data.error);
+        } else {
+            alert('Producto actualizado exitosamente!');
+            window.location.href = '{{ url_for("detalle_producto", id=producto.id) }}';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error al actualizar el producto');
+    });
+});
+
+function eliminarProducto() {
+    const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+    modal.show();
+}
+
+document.getElementById('confirmDelete').addEventListener('click', function() {
+    fetch('/api/productos/{{ producto.id }}', {
+        method: 'DELETE'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            alert('Error: ' + data.error);
+        } else {
+            alert('Producto eliminado exitosamente!');
+            window.location.href = '{{ url_for("consulta") }}';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error al eliminar el producto');
+    });
+    
+    bootstrap.Modal.getInstance(document.getElementById('deleteModal')).hide();
+});
+</script>
+{% endblock %}

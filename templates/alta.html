@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+
+{% block title %}Alta de Producto - Sistema de Gestión de Productos{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h3 class="mb-0">
+                    <i class="fas fa-plus"></i> Alta de Nuevo Producto
+                </h3>
+            </div>
+            <div class="card-body p-4">
+                <form id="productoForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="sku" class="form-label">
+                                    <i class="fas fa-barcode"></i> SKU del Producto *
+                                </label>
+                                <input type="text" class="form-control" id="sku" name="sku" required>
+                                <div class="form-text">Código único del producto</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="imagen" class="form-label">
+                                    <i class="fas fa-image"></i> URL de Imagen
+                                </label>
+                                <input type="url" class="form-control" id="imagen" name="imagen">
+                                <div class="form-text">URL de la imagen del producto</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="cantidad" class="form-label">
+                                    <i class="fas fa-hashtag"></i> Cantidad *
+                                </label>
+                                <input type="number" class="form-control" id="cantidad" name="cantidad" min="0" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="estado" class="form-label">
+                                    <i class="fas fa-toggle-on"></i> Estado *
+                                </label>
+                                <select class="form-select" id="estado" name="estado" required>
+                                    <option value="Activo">Activo</option>
+                                    <option value="Inactivo">Inactivo</option>
+                                    <option value="Descontinuado">Descontinuado</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="categoria" class="form-label">
+                                    <i class="fas fa-tags"></i> Categoría *
+                                </label>
+                                <input type="text" class="form-control" id="categoria" name="categoria" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="precio_venta" class="form-label">
+                                    <i class="fas fa-dollar-sign"></i> Precio de Venta *
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" id="precio_venta" name="precio_venta" 
+                                           step="0.01" min="0" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="costo_unitario" class="form-label">
+                                    <i class="fas fa-coins"></i> Costo Unitario *
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" id="costo_unitario" name="costo_unitario" 
+                                           step="0.01" min="0" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="proveedor" class="form-label">
+                                    <i class="fas fa-truck"></i> Proveedor *
+                                </label>
+                                <input type="text" class="form-control" id="proveedor" name="proveedor" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="politica_gestion_inventario" class="form-label">
+                                    <i class="fas fa-cogs"></i> Política de Gestión de Inventario
+                                </label>
+                                <select class="form-select" id="politica_gestion_inventario" name="politica_gestion_inventario">
+                                    <option value="">Seleccionar política</option>
+                                    <option value="FIFO">FIFO (Primero en entrar, primero en salir)</option>
+                                    <option value="LIFO">LIFO (Último en entrar, primero en salir)</option>
+                                    <option value="PROMEDIO">Promedio ponderado</option>
+                                    <option value="ESPECIFICO">Identificación específica</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label">
+                            <i class="fas fa-align-left"></i> Descripción
+                        </label>
+                        <textarea class="form-control" id="descripcion" name="descripcion" rows="4" 
+                                  placeholder="Descripción detallada del producto..."></textarea>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('index') }}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Volver al Inicio
+                        </a>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> Guardar Producto
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmación -->
+<div class="modal fade" id="confirmModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmar Alta de Producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro de que desea crear este producto?</p>
+                <div id="productoPreview"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success" id="confirmCreate">Crear Producto</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('productoForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Mostrar modal de confirmación
+    const formData = new FormData(this);
+    const productoData = Object.fromEntries(formData);
+    
+    // Crear preview del producto
+    const preview = `
+        <div class="row">
+            <div class="col-6"><strong>SKU:</strong></div>
+            <div class="col-6">${productoData.sku}</div>
+            <div class="col-6"><strong>Categoría:</strong></div>
+            <div class="col-6">${productoData.categoria}</div>
+            <div class="col-6"><strong>Cantidad:</strong></div>
+            <div class="col-6">${productoData.cantidad}</div>
+            <div class="col-6"><strong>Precio:</strong></div>
+            <div class="col-6">$${productoData.precio_venta}</div>
+        </div>
+    `;
+    
+    document.getElementById('productoPreview').innerHTML = preview;
+    
+    const modal = new bootstrap.Modal(document.getElementById('confirmModal'));
+    modal.show();
+});
+
+document.getElementById('confirmCreate').addEventListener('click', function() {
+    const formData = new FormData(document.getElementById('productoForm'));
+    const productoData = Object.fromEntries(formData);
+    
+    fetch('/api/productos', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(productoData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            alert('Error: ' + data.error);
+        } else {
+            alert('Producto creado exitosamente!');
+            document.getElementById('productoForm').reset();
+            bootstrap.Modal.getInstance(document.getElementById('confirmModal')).hide();
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error al crear el producto');
+    });
+});
+</script>
+{% endblock %}
